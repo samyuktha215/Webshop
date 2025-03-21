@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Products</title>
+</head>
+<body>
+
+<h1>Add New Product</h1>
+<form th:action="@{/add-product}" method="post">
+  <label>Product Name:</label>
+  <input type="text" name="name" required />
+  <br>
+
+  <label>Price:</label>
+  <input type="number" name="price" step="0.01" required />
+  <br>
+
+  <button type="submit">Add Product</button>
+</form>
+
+<hr>
+
+<h1>Available Products</h1>
+<form th:action="@{/add-to-basket}" method="post">
+  <input type="hidden" th:value="${userId}" name="userId" />
+  <table>
+    <tr th:each="product : ${products}">
+      <td><input type="checkbox" name="productIds" th:value="${product.id}" /></td>
+      <td th:text="${product.name}"></td>
+      <td th:text="${product.price}"></td>
+    </tr>
+  </table>
+  <button type="submit">Add Selected to Basket</button>
+</form>
+
+
+</body>
+</html>

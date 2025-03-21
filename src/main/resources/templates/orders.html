@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders</title>
+</head>
+<body>
+
+<h1>Your Shopping Basket</h1>
+
+<!-- Display All Order Lines -->
+<h2>Items in Basket</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="orderLine : ${orderLines}">
+        <td th:text="${orderLine.product.name}"></td>
+        <td th:text="${orderLine.product.price}"></td>
+        <td th:text="${orderLine.quantity}"></td>
+        <td>
+            <!-- Remove button -->
+            <form th:action="@{/orders/remove}" method="post">
+                <input type="hidden" th:value="${orderLine.product.id}" name="productId" />
+                <input type="hidden" th:value="${orderLine.quantity}" name="quantity" />
+                <button type="submit">Remove from Basket</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Show Total Price -->
+<h2>Total Price: <span th:text="${totalPrice}"></span></h2>
+
+<!-- Place Order -->
+<form th:action="@{/orders/place-order}" method="post">
+    <label>User ID:</label>
+    <input type="text" name="userId" placeholder="Enter User ID" required />
+    <br>
+    <button type="submit">Place Order</button>
+</form>
+
+<!-- Clear Basket Button -->
+<form th:action="@{/orders/clear}" method="post">
+    <button type="submit">Clear Basket</button>
+</form>
+
+</body>
+</html>

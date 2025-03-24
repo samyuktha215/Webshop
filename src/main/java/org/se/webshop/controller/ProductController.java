@@ -1,12 +1,11 @@
 package org.se.webshop.controller;
 
 
-import org.se.webshop.entity.Order;
-import org.se.webshop.entity.OrderLine;
-import org.se.webshop.entity.Product;
-import org.se.webshop.entity.ShoppingBasket;
+import org.se.webshop.entity.*;
 import org.se.webshop.repo.OrderRepo;
+import org.se.webshop.repo.ProductRepo;
 import org.se.webshop.service.ProductService;
+import org.se.webshop.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,10 @@ public class ProductController {
    private final ShoppingBasket shoppingBasket = new ShoppingBasket();
     @Autowired
     private OrderRepo orderRepo;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private ProductRepo productRepo;
 
     @GetMapping("/products")
     public String showProducts(Model model) {
@@ -38,11 +41,34 @@ public class ProductController {
         return "products";
     }
 
-    @PostMapping("/add-product")
-    public String addProduct(@RequestParam String name, @RequestParam Double price) {
-        productService.addProduct(name, price);
-        return "redirect:/products";
-    }
+    @PostMapping("/products/add-product")
+    public String addProduct(Model model,@RequestParam String userName,@RequestParam String name, @RequestParam Double price, @RequestParam Category category) {
+
+
+            logger.info("Received request to add product by user: {}", userName);
+
+            String role = userService.getUserRole(userName);
+            logger.info("User role: {}", role);
+
+            if (!"ADMIN".equalsIgnoreCase(role)) {
+                logger.warn("User {} does not have permission to add products", userName);
+                model.addAttribute("error", "Only ADMIN users can add products.");
+                model.addAttribute("products", productService.getAllProducts());
+                return "products";
+            }
+
+            boolean isAdded = productService.addProduct(userName, name, price, category);
+
+            if (!isAdded) {
+                logger.error("Failed to add product");
+                model.addAttribute("error", "Failed to add product.");
+            } else {
+                logger.info("Product '{}' added successfully", name);
+            }
+
+            model.addAttribute("products", productService.getAllProducts());
+            return "products";
+        }
 
 
     @GetMapping("/basket")
@@ -99,7 +125,7 @@ public class ProductController {
        double totalPrice = shoppingBasket.getTotalPrice();
 
        Order order= new Order();
-       order.setStatus("COMPLETED");
+       order.setStatus("PENDING");
        order.setDate(LocalDate.now());
        order.setOrderLines(shoppingBasket.getOrderLines());
 

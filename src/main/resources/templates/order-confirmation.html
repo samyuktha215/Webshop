@@ -62,13 +62,20 @@
 
     <p>Your order has been placed successfully!</p>
 
+
     <h2>Order Details</h2>
+
+    <p><strong>Order ID:</strong> <span th:text="${order.id}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+
+
     <table>
         <tr>
             <th>Product Name</th>
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
+
         </tr>
         <tr th:each="orderLine : ${order.orderLines}">
             <td th:text="${orderLine.product.name}"></td>

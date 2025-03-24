@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users List</title>
+</head>
+<body>
+
+<h1 th:if="${message}" th:text="${message}"></h1>
+<h1 th:unless="${message}">User <span th:text="${userName}"></span> has role: <span th:text="${role}"></span></h1>
+
+<h1>All Users</h1>
+<table>
+  <tr>
+    <th>UserName</th>
+    <th>Role</th>
+  </tr>
+
+  <tr th:each="user : ${usersList}">
+    <td th:text="${user.userName}"></td>
+    <td th:text="${user.role}"></td>
+  </tr>
+</table>
+
+</body>
+</html>

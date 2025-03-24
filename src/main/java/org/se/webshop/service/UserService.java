@@ -15,8 +15,17 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepo userRepo;
-    private User user;
+    private User loggedInUser;
     private ShoppingBasket shoppingBasket=new ShoppingBasket();
+
+    public String getUserRole(String userName) {
+        User user=userRepo.getUserByUserName(userName);
+        if (user == null) {
+            System.out.println("User not found: " + userName);
+            return null;
+        }
+        return user.getRole();
+    }
 
     public boolean registerUser(User user) {
      if (userRepo.findByUserName(user.getUserName()).size()>0) {
@@ -27,8 +36,8 @@ public class UserService {
      return true;
     }
 
-    public User getUserByUsername(String username) {
-        List<User> users=userRepo.findByUserName(username);
+    public User getUserByUsername(String userName) {
+        List<User> users=userRepo.findByUserName(userName);
         if(users.size()>0){
             return users.get(0);
         }
@@ -36,13 +45,12 @@ public class UserService {
 
     }
     public boolean loginUser(User user) {
-
         List<User> usersList=userRepo.findByUserName(user.getUserName());
 
         if(usersList.size()>0){
             User tempuser=usersList.get(0);
             if(tempuser.getPassword().equals(user.getPassword())){
-                this.user=tempuser;
+                this.loggedInUser =tempuser;
                 return true;
             }
 
@@ -51,8 +59,10 @@ public class UserService {
         return false;
     }
 
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
 
-    public User getUserById(Long userId) {
-        return userRepo.getById(userId);
     }
+
+
 }

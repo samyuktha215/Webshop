@@ -22,12 +22,13 @@ public class Product {
 
     private double price;
 
-    public Product(String name, double price) {
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    public Product(String name, double price,Category category) {
         this.name = name;
         this.price = price;
+        this.category = category;
     }
-
-
-
 
 }

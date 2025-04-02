@@ -27,7 +27,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     List<OrderLine> orderLines;
 
     public Order(String status, LocalDate date, User user) {

@@ -18,12 +18,7 @@ public class OrderLine {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-
     private int quantity;
-
 
     public OrderLine(int quantity, Product product) {
         this.quantity = quantity;

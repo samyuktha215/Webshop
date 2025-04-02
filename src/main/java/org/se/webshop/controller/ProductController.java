@@ -31,8 +31,7 @@ public class ProductController {
     private OrderRepo orderRepo;
     @Autowired
     private UserService userService;
-    @Autowired
-    private ProductRepo productRepo;
+
 
     @GetMapping("/products")
     public String showProducts(Model model) {

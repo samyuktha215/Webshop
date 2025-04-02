@@ -1,4 +1,4 @@
-package org.se.webshop.entity;
+    package org.se.webshop.entity;
 
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;

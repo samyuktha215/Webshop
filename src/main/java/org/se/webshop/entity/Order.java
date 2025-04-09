@@ -45,5 +45,7 @@ public class Order {
     }
 
 
+    public void setTotalPrice(double totalPrice) {
 
+    }
 }

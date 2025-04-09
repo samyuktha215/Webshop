@@ -10,4 +10,6 @@ import java.util.List;
 public interface UserRepo extends JpaRepository<User, Long> {
     List<User> findByUserName(String userName);
     User getUserByUserName(String userName);
+    User findById(long id);
+
 }

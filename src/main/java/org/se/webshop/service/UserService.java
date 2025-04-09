@@ -1,7 +1,9 @@
 package org.se.webshop.service;
 
-import org.se.webshop.entity.ShoppingBasket;
+import lombok.Getter;
+import org.se.webshop.entity.Order;
 import org.se.webshop.entity.User;
+import org.se.webshop.repo.OrderRepo;
 import org.se.webshop.repo.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,12 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepo userRepo;
-    private User loggedInUser;
+
+    @Getter
     private ShoppingBasket shoppingBasket=new ShoppingBasket();
+    @Autowired
+    private OrderRepo orderRepo;
+    private User loggedInUser;
 
     public String getUserRole(String userName) {
         User user=userRepo.getUserByUserName(userName);
@@ -62,6 +68,15 @@ public class UserService {
     public List<User> getAllUsers() {
         return userRepo.findAll();
 
+    }
+
+    public User findById(Long id) {
+        return userRepo.findById(id).orElse(null);  // Find user by ID
+    }
+
+    public List<Order>getUserOrders(){
+        User user=loggedInUser;
+        return orderRepo.findByUser(user);
     }
 
 

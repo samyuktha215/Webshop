@@ -1,0 +1,42 @@
+<!-- templates/checkout.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+<h1>Checkout</h1>
+
+<div th:if="${shoppingBasket.orderLines.size() == 0}">
+    <p>Your basket is empty.</p>
+    <a href="/products">Go back to products</a>
+</div>
+
+<div th:if="${shoppingBasket.orderLines.size() > 0}">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price per Unit</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="line : ${shoppingBasket.orderLines}">
+            <td th:text="${line.product.name}"></td>
+            <td th:text="${line.quantity}"></td>
+            <td th:text="${line.product.price}"></td>
+            <td th:text="${line.quantity * line.product.price}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p><strong>Total Price:</strong> <span th:text="${shoppingBasket.calculateTotalPrice(cart)}"></span> €</p>
+
+    <form method="post" action="/checkout">
+        <button type="submit">Confirm Checkout</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,6 +1,8 @@
 package org.se.webshop.controller;
 
+import org.se.webshop.entity.Order;
 import org.se.webshop.entity.User;
+import org.se.webshop.service.OrderService;
 import org.se.webshop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,10 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -41,11 +47,22 @@ public class UserController {
     public String login(@ModelAttribute User user, Model model) {
         boolean isLogin = userService.loginUser(user);
         if (isLogin) {
-            return "redirect:/products";
+            String role = userService.getUserRole(user.getUserName());
+            if (role.equals("ADMIN")) {
+                return "add-product";
+            }
+            return "products";
         }
         model.addAttribute("error", "Invalid username or password!");
         return "userRegister";
 
+    }
+
+    @GetMapping("/orders")
+    public String showOrders(Model model) {
+        List<Order>orders=userService.getUserOrders();
+        model.addAttribute("orders", orders);
+        return "user-orders";
     }
 
 

@@ -1,61 +1,45 @@
 package org.se.webshop.service;
 
 
-import org.se.webshop.entity.*;
-
-
+import org.se.webshop.entity.Order;
+import org.se.webshop.entity.OrderLine;
+import org.se.webshop.entity.Product;
+import org.se.webshop.entity.User;
 import org.se.webshop.repo.OrderRepo;
-import org.se.webshop.repo.ProductRepo;
-import org.se.webshop.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class OrderService {
+   @Autowired
+    private OrderRepo orderRepo;
+   @Autowired
+   private ShoppingBasket shoppingBasket;
 
-    private final ProductRepo productRepo;
-    private final UserRepo userRepo;
-    private final OrderRepo orderRepo;
-    private  ShoppingBasket shoppingBasket=new ShoppingBasket();
-
-    public OrderService(ProductRepo productRepo, UserRepo userRepo, OrderRepo orderRepo) {
-        this.productRepo = productRepo;
-        this.userRepo = userRepo;
-        this.orderRepo = orderRepo;
-
-    }
-
-    public List<OrderLine> getAllOrderLines() {
-        return shoppingBasket.getOrderLines();
-    }
-
-    public double getBasketTotal() {
-        return shoppingBasket.getTotalPrice();
-    }
-
-    public void removeFromBasket(int productId, int quantity) {
-        Product product = productRepo.findById(productId).orElse(null);
-        if (product != null) {
-            OrderLine orderLine = new OrderLine(quantity, product);
-            shoppingBasket.removeOrderLine(orderLine);
+   public List<Order> getOrders() {
+       return orderRepo.findAll();
+   }
+    public Order createOrderFromBasket() {
+        if (shoppingBasket == null || shoppingBasket.getOrderLines().isEmpty()) {
+            return null;
         }
-    }
 
-    public void placeOrder(Long userId) {
+        Order order = new Order();
+        List<OrderLine> orderLines = shoppingBasket.getOrderLines();
 
-        User user = userRepo.findById(userId).orElse(null);
-        if (user != null) {
-            Order order = new Order();
-            order.setUser(user);
-            order.setStatus("PENDING");
-            orderRepo.save(order);
-        }
-    }
+        order.setOrderLines(new ArrayList<>(shoppingBasket.getOrderLines()));
+        order.setStatus("PENDING");
+        order.setDate(LocalDate.now());
 
-    public void clearBasket() {
+        orderRepo.save(order);
         shoppingBasket.clearBasket();
+
+        return order;
     }
+
 }

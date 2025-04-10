@@ -33,7 +33,7 @@ public class ProductService {
     public boolean addProduct(String userName, String name, Double price, Category category) {
         System.out.println("addProduct method called");
 
-        String role = userService.getUserRole(userName);
+        String role = String.valueOf(userService.getUserRole(userName));
         System.out.println("User Role: " + role);
 
         if (!"ADMIN".equalsIgnoreCase(role)) {

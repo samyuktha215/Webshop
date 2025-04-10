@@ -50,7 +50,7 @@ public class UserController {
         if (isLogin) {
             User loggedInUser = userService.getLoggedInUser();
             System.out.println("Logged in user: " + loggedInUser.getUserName());
-            String role = userService.getUserRole(user.getUserName());
+            String role = String.valueOf(userService.getUserRole(user.getUserName()));
             if (role.equals("ADMIN")) {
                 return "add-product";
             }

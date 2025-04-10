@@ -1,9 +1,8 @@
 package org.se.webshop.service;
 
 import lombok.Getter;
-import org.se.webshop.entity.Order;
-import org.se.webshop.entity.OrderLine;
 import org.se.webshop.entity.User;
+import org.se.webshop.entity.UserRole;
 import org.se.webshop.repo.OrderRepo;
 import org.se.webshop.repo.UserRepo;
 
@@ -27,32 +26,30 @@ public class UserService {
     @Getter
     private User loggedInUser;
 
-    public String getUserRole(String userName) {
+    public UserRole getUserRole(String userName) {
         User user=userRepo.getUserByUserName(userName);
         if (user == null) {
             System.out.println("User not found: " + userName);
             return null;
         }
-        return user.getRole();
+        String roleString = String.valueOf(user.getRole());  // The role should be stored as a String in your User entity
+        try {
+            return UserRole.valueOf(roleString);  // Convert the String to the UserRole enum
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid role for user: " + userName);
+            return null;
+        }
     }
 
     public boolean registerUser(User user) {
      if (userRepo.findByUserName(user.getUserName()).size()>0) {
          return false;
      }
-     user.setRole("USER");
+     user.setRole(UserRole.USER);
          user= userRepo.save(user);
      return true;
     }
 
-    public User getUserByUsername(String userName) {
-        List<User> users=userRepo.findByUserName(userName);
-        if(users.size()>0){
-            return users.get(0);
-        }
-        return null;
-
-    }
     public boolean loginUser(User user) {
         List<User> usersList=userRepo.findByUserName(user.getUserName());
 

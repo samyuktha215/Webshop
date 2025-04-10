@@ -1,10 +1,7 @@
 package org.se.webshop.controller;
 
 import jakarta.servlet.http.HttpSession;
-import org.se.webshop.entity.Order;
-import org.se.webshop.entity.OrderLine;
-import org.se.webshop.entity.OrderStatus;
-import org.se.webshop.entity.User;
+import org.se.webshop.entity.*;
 import org.se.webshop.repo.UserRepo;
 import org.se.webshop.service.OrderService;
 import org.se.webshop.service.ShoppingBasket;
@@ -79,7 +76,7 @@ public class OrderController {
     public String updateOrderStatus(@RequestParam("orderId") Long orderId,@RequestParam("status") String status,
                                     Model model) {
 
-        String userRole = userService.getUserRole("VED");
+        String userRole = String.valueOf(userService.getUserRole("SAM"));
         if (!userRole.equals("ADMIN")) {
             model.addAttribute("error", "You do not have permission to update the order status.");
             return "access-denied";

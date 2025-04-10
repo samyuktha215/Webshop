@@ -20,7 +20,7 @@ public class UserRoleController {
 
     @GetMapping("/role")
     public String getUserRole(@RequestParam String userName,Model model) {
-        String role = userService.getUserRole(userName);
+        String role = String.valueOf(userService.getUserRole(userName));
 
         if (role == null) {
             model.addAttribute("message", "User " + userName + " not found.");

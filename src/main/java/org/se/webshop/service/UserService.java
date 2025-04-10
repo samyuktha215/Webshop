@@ -2,6 +2,7 @@ package org.se.webshop.service;
 
 import lombok.Getter;
 import org.se.webshop.entity.Order;
+import org.se.webshop.entity.OrderLine;
 import org.se.webshop.entity.User;
 import org.se.webshop.repo.OrderRepo;
 import org.se.webshop.repo.UserRepo;
@@ -17,11 +18,13 @@ import java.util.List;
 public class UserService {
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private OrderRepo orderRepo;
 
     @Getter
     private ShoppingBasket shoppingBasket=new ShoppingBasket();
-    @Autowired
-    private OrderRepo orderRepo;
+
+    @Getter
     private User loggedInUser;
 
     public String getUserRole(String userName) {
@@ -53,30 +56,25 @@ public class UserService {
     public boolean loginUser(User user) {
         List<User> usersList=userRepo.findByUserName(user.getUserName());
 
-        if(usersList.size()>0){
-            User tempuser=usersList.get(0);
-            if(tempuser.getPassword().equals(user.getPassword())){
-                this.loggedInUser =tempuser;
+        if (!usersList.isEmpty()) {
+            User tempUser = usersList.get(0);
+            if (tempUser.getPassword().equals(user.getPassword())) {
+                this.loggedInUser = tempUser;
+                System.out.println("Logged in user: " + this.loggedInUser.getUserName());
                 return true;
             }
-
         }
-
         return false;
     }
 
     public List<User> getAllUsers() {
         return userRepo.findAll();
-
     }
 
-    public User findById(Long id) {
-        return userRepo.findById(id).orElse(null);  // Find user by ID
-    }
 
-    public List<Order>getUserOrders(){
-        User user=loggedInUser;
-        return orderRepo.findByUser(user);
+    public boolean isAdmin() {
+        User loggedInUser=getLoggedInUser();
+        return loggedInUser!=null && loggedInUser.getRole().equals("ADMIN");
     }
 
 

@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -19,8 +20,8 @@ public class Order {
     private Long Id;
 
     private LocalDate date;
-
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
 
     @ManyToOne
@@ -30,7 +31,7 @@ public class Order {
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER )
     List<OrderLine> orderLines;
 
-    public Order(String status, LocalDate date, User user) {
+    public Order(OrderStatus status, LocalDate date, User user) {
         this.status = status;
         this.date = date;
         this.user = user;
@@ -46,6 +47,5 @@ public class Order {
 
 
     public void setTotalPrice(double totalPrice) {
-
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -44,9 +45,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute User user, Model model) {
+    public String login(@ModelAttribute("User") User user, Model model) {
         boolean isLogin = userService.loginUser(user);
         if (isLogin) {
+            User loggedInUser = userService.getLoggedInUser();
+            System.out.println("Logged in user: " + loggedInUser.getUserName());
             String role = userService.getUserRole(user.getUserName());
             if (role.equals("ADMIN")) {
                 return "add-product";
@@ -57,14 +60,15 @@ public class UserController {
         return "userRegister";
 
     }
-
-    @GetMapping("/orders")
-    public String showOrders(Model model) {
-        List<Order>orders=userService.getUserOrders();
-        model.addAttribute("orders", orders);
-        return "user-orders";
+    @GetMapping("/check-user")
+    @ResponseBody
+    public String checkUser() {
+        User user = userService.getLoggedInUser();
+        if (user == null) {
+            return "No user is logged in.";
+        }
+        return "Logged in as: " + user.getUserName() + " with role: " + user.getRole();
     }
-
 
 
 }

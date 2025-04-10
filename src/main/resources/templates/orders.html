@@ -1,84 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Orders</title>
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-      font-size: 18px;
-      text-align: left;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-    }
-    th {
-      background-color: #f4f4f4;
-    }
-    .status-select {
-      width: 100%;
-      padding: 5px;
-    }
-    .update-btn {
-      padding: 5px 10px;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .update-btn:hover {
-      background-color: #218838;
-    }
-  </style>
+    <title>Your Orders</title>
 </head>
 <body>
 
-<h1>Order Management</h1>
+<h2>Your Orders</h2>
 
-<table>
-  <thead>
-  <tr>
-    <th>Order ID</th>
-    <th>User</th>
-    <th>Date</th>
-    <th>Products</th>
-    <th>Total Price</th>
-    <th>Status</th>
-    <th>Update Status</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="order : ${orders}">
-    <td th:text="${order.id}"></td>
-    <td th:text="${order.user.username}"></td>
-    <td th:text="${order.date}"></td>
-    <td>
-      <ul>
-        <li th:each="orderLine : ${order.orderLines}">
-          <span th:text="${orderLine.product.name}"></span> -
-          <span th:text="${orderLine.quantity}"></span> pcs
-        </li>
-      </ul>
-    </td>
-    <td th:text="'$' + ${order.totalPrice}"></td>
-    <td th:text="${order.status}"></td>
-    <td>
-      <form th:action="@{/orders/update-status}" method="post">
-        <input type="hidden" name="orderId" th:value="${order.id}" />
-        <select name="status" class="status-select">
-          <option value="PENDING" th:selected="${order.status == 'PENDING'}">Pending</option>
-          <option value="SHIPPING" th:selected="${order.status == 'SHIPPING'}">Shipping</option>
-          <option value="OUT_FOR_DELIVERY" th:selected="${order.status == 'OUT_FOR_DELIVERY'}">Out for Delivery</option>
-          <option value="DELIVERED" th:selected="${order.status == 'DELIVERED'}">Delivered</option>
-        </select>
-        <button type="submit" class="update-btn">Update</button>
-      </form>
-    </td>
-  </tr>
-  </tbody>
+<div th:if="${#lists.isEmpty(orders)}">
+    <p>No orders available.</p>
+</div>
+
+<table th:if="${!#lists.isEmpty(orders)}" border="1" cellpadding="8" cellspacing="0">
+    <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Total Items</th>
+        <th>Total Price (€)</th>
+    </tr>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}">1</td>
+        <td th:text="${order.date}">2025-04-09</td>
+        <td th:text="${order.status}">PENDING</td>
+        <td th:text="${#lists.size(order.orderLines)}">0</td>
+        <td th:text="${orderTotal[order.id]}">0.00</td>
+
+        <td>
+            <form th:action="update-status" method="POST">
+                <input type="hidden" name="orderId" th:value="${order.id}" />
+                <input type="text" name="status" value="${order.status}" />
+                <button type="submit">Update Status</button>
+            </form>
+
+
+        </td>
+    </tr>
+
 </table>
+
+
 
 </body>
 </html>

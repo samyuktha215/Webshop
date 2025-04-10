@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,11 +25,7 @@ public class User {
         this.password = password;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<Order> orders;
-
-
-
-
 
 }

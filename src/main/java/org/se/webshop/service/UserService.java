@@ -32,9 +32,9 @@ public class UserService {
             System.out.println("User not found: " + userName);
             return null;
         }
-        String roleString = String.valueOf(user.getRole());  // The role should be stored as a String in your User entity
+        String roleString = String.valueOf(user.getRole());
         try {
-            return UserRole.valueOf(roleString);  // Convert the String to the UserRole enum
+            return UserRole.valueOf(roleString);
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid role for user: " + userName);
             return null;

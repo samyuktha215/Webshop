@@ -21,7 +21,6 @@ public class BasketController {
     @Autowired
     private ProductService productService;
 
-    // Add to Cart
     @PostMapping("/basket/add")
     public String addToCart(@RequestParam Long productId, @RequestParam int quantity, Model model) {
         shoppingBasket.addOrderLine(productId, quantity);
@@ -33,7 +32,6 @@ public class BasketController {
         return "products";
     }
 
-    // Update Cart Method
     @PostMapping("/basket/update")
     public String updateCart(@RequestParam List<Long> productIds, @RequestParam List<Integer> quantities, Model model) {
         List<OrderLine> updatedCart = shoppingBasket.updateCart(productIds, quantities);
@@ -43,7 +41,7 @@ public class BasketController {
         return "basket";
     }
 
-    // Clear the Cart
+
     @PostMapping("/basket/clear")
     public String clearBasket(Model model) {
         shoppingBasket.clearBasket();

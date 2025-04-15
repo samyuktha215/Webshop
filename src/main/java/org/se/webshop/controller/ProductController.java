@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import java.time.LocalDate;
 import java.util.*;
 
 
@@ -22,12 +21,6 @@ public class ProductController {
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
    @Autowired
    private ProductService productService;
-
-    @Autowired
-    private OrderRepo orderRepo;
-    @Autowired
-    private UserService userService;
-
 
     @GetMapping("/products")
     public String showProducts(Model model) {

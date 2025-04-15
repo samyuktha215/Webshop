@@ -1,8 +1,7 @@
 package org.se.webshop.controller;
 
-import jakarta.servlet.http.HttpSession;
+
 import org.se.webshop.entity.*;
-import org.se.webshop.repo.UserRepo;
 import org.se.webshop.service.OrderService;
 import org.se.webshop.service.ShoppingBasket;
 import org.se.webshop.service.UserService;
@@ -10,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

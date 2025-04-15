@@ -18,8 +18,6 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private OrderService orderService;
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {

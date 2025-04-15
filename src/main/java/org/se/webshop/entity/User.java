@@ -2,9 +2,8 @@ package org.se.webshop.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Data

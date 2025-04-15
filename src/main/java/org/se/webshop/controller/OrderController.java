@@ -93,14 +93,6 @@ public class OrderController {
         return "orders";
     }
 
-    @GetMapping("/order/{id}")
-    public String showOrderDetails(@PathVariable Long id, Model model) {
-        Order order = orderService.getOrderById(id);
-        model.addAttribute("order", order);
-        return "order-details";
-    }
-
-
 
 }
 
